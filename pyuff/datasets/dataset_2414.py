@@ -13,24 +13,31 @@ def _write2414(fh, dset):
     try:
         # Handle general optional fields
         
-        if dset['analysis_type']==5:
-            fh.write('%6i\n%6i\n' % (-1, 2414))
-            fh.write('%10i\n' % (dset['analysis_dataset_label'])) #Loadcase number (DS2414_num)
-            fh.write('%-80s\n' % (dset['analysis_dataset_name'])) #usually with the frequency
-            fh.write('%10i\n' % (dset['dataset_location']))
-            fh.write('%-80s\n' % dset['id1'])
-            fh.write('%-80s\n' % dset['id2'])
-            fh.write('%-80s\n' % dset['id3']) #usually with the frequency
-            fh.write('%-80s\n' % dset['id4']) #usually with the loadcase
-            fh.write('%-80s\n' % dset['id5'])
+        fh.write('%6i\n%6i\n' % (-1, 2414))
 
-            fh.write('%10i%10i%10i%10i%10i%10i\n' % (
-                                            dset['model_type'], 
-                                            dset['analysis_type'], 
-                                            dset['data_characteristic'], 
-                                            dset['result_type'],
-                                            dset['data_type'], 
-                                            dset['number_of_data_values_for_the_data_component']))
+        ## Records 1-9 are common
+        fh.write('%10i\n' % (dset['analysis_dataset_label'])) #Loadcase number (DS2414_num)
+        fh.write('%-80s\n' % (dset['analysis_dataset_name']))
+        fh.write('%10i\n' % (dset['dataset_location']))
+        fh.write('%-80s\n' % dset['id1'])
+        fh.write('%-80s\n' % dset['id2'])
+        fh.write('%-80s\n' % dset['id3']) #usually with the frequency
+        fh.write('%-80s\n' % dset['id4']) #usually with the loadcase
+        fh.write('%-80s\n' % dset['id5'])
+        fh.write('%10i%10i%10i%10i%10i%10i\n' % (dset['model_type'], 
+                                                 dset['analysis_type'], 
+                                                 dset['data_characteristic'], 
+                                                 dset['result_type'],
+                                                 dset['data_type'], 
+                                                 dset['number_of_data_values_for_the_data_component']))
+
+        if dset['analysis_type']==4:
+            for node in range(dset['node_nums'].shape[0]):
+                fh.write('%10i\n' % (int(dset['node_nums'][node])))
+                fh.write('%13.5e%13.5e%13.5ee\n' % (np.real(dset['x'][node]),
+                                                    np.real(dset['y'][node]),
+                                                    np.real(dset['z'][node])))
+        elif dset['analysis_type']==5:
             fh.write('%10i%10i%10i%10i%10i%10i%10i%10i\n' % (
                                             dset['design_set_id'], 
                                             dset['iteration_number'],
@@ -66,7 +73,7 @@ def _write2414(fh, dset):
                                             np.imag(dset['y'][node]),
                                             np.real(dset['z'][node]),
                                             np.imag(dset['z'][node])))
-            fh.write('%6i\n' % (-1))    
+        fh.write('%6i\n' % (-1))    
     except:
         raise Exception('Error writing data-set #2414')
 

@@ -4,7 +4,24 @@ from ..tools import _opt_fields, _parse_header_line, check_dict_for_none
 
 def _write2412(fh, dset):
     try:
-        elt_type_dict = {'triangle': 3, 'quad': 4}
+        elt_type_dict = {
+            ## 2D elements
+            'triangle': 3,
+            'quad': 4,
+            ## Shells
+            'shell3': 3,
+            'shell4': 4,
+            'shell6': 6,
+            ## 3D elements
+            'tet': 4,
+            'tet4': 4,
+            'tet10': 10,
+            'wedge': 6,
+            'wedge6': 6,
+            'wedge15': 15,
+            'hex': 8,
+            'hex8': 8,
+            'hex20': 20}
         fh.write('%6i\n%6i%74s\n' % (-1, 2412, ' '))
         for elt_type in dset:
             if elt_type == "type":

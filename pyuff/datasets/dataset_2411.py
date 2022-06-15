@@ -10,11 +10,11 @@ def _write2411(fh, dset):
         dset = _opt_fields(dset, dict)
         fh.write('%6i\n%6i%74s\n' % (-1, 2411, ' '))
 
-        for node in range(dset['grid_global'].shape[0]):
-            fh.write('%10i%10i%10i%10i\n' % (dset['grid_global'][node, 0], dset['export_cs_number'],
-                                                dset['grid_global'][node, 0], dset['cs_color']))
+        for node in range(dset['node_nums'].shape[0]):            
+            fh.write('%10i%10i%10i%10i\n' % (dset['node_nums'][node], dset['export_cs_number'],
+                                             dset['node_nums'][node], dset['cs_color']))
 
-            fh.write('%25.16e%25.16e%25.16e\n' % tuple(dset['grid_global'][node, 1:]))
+            fh.write('%25.16e%25.16e%25.16e\n' % tuple([dset['x'][node],dset['y'][node],dset['z'][node]]))
 
         fh.write('%6i\n' % -1)
 
