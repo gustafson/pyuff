@@ -4,15 +4,11 @@ from ..tools import _opt_fields, _parse_header_line, check_dict_for_none
 
 def _write2411(fh, dset):
     try:
-        dict = {'export_cs_number': 0,
-                'cs_color': 8}
-
-        dset = _opt_fields(dset, dict)
         fh.write('%6i\n%6i%74s\n' % (-1, 2411, ' '))
 
         for node in range(dset['node_nums'].shape[0]):            
-            fh.write('%10i%10i%10i%10i\n' % (dset['node_nums'][node], dset['export_cs_number'],
-                                             dset['node_nums'][node], dset['cs_color']))
+            fh.write('%10i%10i%10i%10i\n' % (dset['node_nums'][node], dset['def_cs'],
+                                             dset['disp_cs'], dset['color']))
 
             fh.write('%25.16e%25.16e%25.16e\n' % tuple([dset['x'][node],dset['y'][node],dset['z'][node]]))
 

@@ -93,8 +93,8 @@ def prepare_164(
     >>> dataset
     """
 
-    if units_code not in np.arange(10) and units_code != None:
-        raise ValueError('units code must be integer between 0 and 9')
+    if units_code not in np.arange(1,11) and units_code != None:
+        raise ValueError('units code must be integer between 1 and 10')
     if type(units_description) != str and units_description != None:
         raise TypeError('units_decription must be string')
     if temp_mode not in (1, 2, None):

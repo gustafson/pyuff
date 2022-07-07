@@ -31,39 +31,43 @@ def _write2414(fh, dset):
                                                  dset['data_type'], 
                                                  dset['number_of_data_values_for_the_data_component']))
 
+
+        ## These next 4 lines can be identify for dset['analysis_type']==4 or dset['analysis_type']==5
+        fh.write('%10i%10i%10i%10i%10i%10i%10i%10i\n' % (
+                                        dset['design_set_id'], 
+                                        dset['iteration_number'],
+                                        dset['solution_set_id'],
+                                        dset['boundary_condition'], 
+                                        dset['load_set'],
+                                        dset['mode_number'], 
+                                        dset['time_step_number'],
+                                        dset['frequency_number']))
+        fh.write('%10i%10i\n' % (
+                                        dset['creation_option'], 
+                                        dset['number_retained']))
+        fh.write('%13.5e%13.5e%13.5e%13.5e%13.5e%13.5e\n' % (
+                                        dset['time'],
+                                        dset['frequency'], 
+                                        dset['eigenvalue'], 
+                                        dset['modal_mass'],
+                                        dset['viscous_damping'], 
+                                        dset['hysteretic_damping']))
+        fh.write('%13.5e%13.5e%13.5e%13.5e%13.5e%13.5e\n' % (
+                                        dset['real_part_eigenvalue'], 
+                                        dset['imaginary_part_eigenvalue'], 
+                                        dset['real_part_of_modal_A_or_modal_mass'], 
+                                        dset['imaginary_part_of_modal_A_or_modal_mass'],
+                                        dset['real_part_of_modal_B_or_modal_mass'], 
+                                        dset['imaginary_part_of_modal_B_or_modal_mass']))                            
+
+        
         if dset['analysis_type']==4:
             for node in range(dset['node_nums'].shape[0]):
                 fh.write('%10i\n' % (int(dset['node_nums'][node])))
-                fh.write('%13.5e%13.5e%13.5ee\n' % (np.real(dset['x'][node]),
-                                                    np.real(dset['y'][node]),
-                                                    np.real(dset['z'][node])))
+                fh.write('%13.5e%13.5e%13.5e\n' % (np.real(dset['x'][node]),
+                                                   np.real(dset['y'][node]),
+                                                   np.real(dset['z'][node])))
         elif dset['analysis_type']==5:
-            fh.write('%10i%10i%10i%10i%10i%10i%10i%10i\n' % (
-                                            dset['design_set_id'], 
-                                            dset['iteration_number'],
-                                            dset['solution_set_id'],
-                                            dset['boundary_condition'], 
-                                            dset['load_set'],
-                                            dset['mode_number'], 
-                                            dset['time_step_number'],
-                                            dset['frequency_number']))
-            fh.write('%10i%10i\n' % (
-                                            dset['creation_option'], 
-                                            dset['number_retained']))
-            fh.write('  %.5e  %.5e  %.5e  %.5e  %.5e  %.5e\n' % (
-                                            dset['time'], 
-                                            dset['frequency'], 
-                                            dset['eigenvalue'], 
-                                            dset['modal_mass'],
-                                            dset['viscous_damping'], 
-                                            dset['hysteretic_damping']))
-            fh.write('  %.5e  %.5e  %.5e  %.5e  %.5e  %.5e\n' % (
-                                            dset['real_part_eigenvalue'], 
-                                            dset['imaginary_part_eigenvalue'], 
-                                            dset['real_part_of_modal_A_or_modal_mass'], 
-                                            dset['imaginary_part_of_modal_A_or_modal_mass'],
-                                            dset['real_part_of_modal_B_or_modal_mass'], 
-                                            dset['imaginary_part_of_modal_B_or_modal_mass']))                            
             for node in range(dset['node_nums'].shape[0]):
                 fh.write('%10i\n' % (int(dset['node_nums'][node])))
                 fh.write('%13.5e%13.5e%13.5e%13.5e%13.5e%13.5e\n' % (
