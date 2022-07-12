@@ -62,11 +62,15 @@ def _write2414(fh, dset):
 
         
         if dset['analysis_type']==4:
-            for node in range(dset['node_nums'].shape[0]):
-                fh.write('%10i\n' % (int(dset['node_nums'][node])))
-                fh.write('%13.5e%13.5e%13.5e\n' % (np.real(dset['x'][node]),
-                                                   np.real(dset['y'][node]),
-                                                   np.real(dset['z'][node])))
+            ## List comprehension limits write calls at the cost of some memory
+            ## Seemed to be about 25% cheaper than what is being done elsewhere.
+            ## Probably more savings for larger files
+            fh.write("".join(['%10i\n%13.5e%13.5e%13.5e\n' %
+                              (dset['node_nums'][node],
+                               dset['x'][node],
+                               dset['y'][node],
+                               dset['z'][node]) for node,_ in enumerate(dset['node_nums'])]))
+            
         elif dset['analysis_type']==5:
             for node in range(dset['node_nums'].shape[0]):
                 fh.write('%10i\n' % (int(dset['node_nums'][node])))
